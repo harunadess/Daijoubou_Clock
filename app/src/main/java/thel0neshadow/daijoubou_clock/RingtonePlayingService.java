@@ -28,7 +28,7 @@ import java.util.Date;
  */
 
 /*
-    TODO: make it work
+    TODO: make it work, but better
     ********************************************
 */
 
@@ -61,9 +61,9 @@ public class RingtonePlayingService extends Service
         //fetch soundId value
         soundId = intent.getExtras().getInt("sound");
 
-        Log.e("In RPS", "woo!");
-        Log.e("Ringtone extra: " , state);
-        Log.e("SoundId: " , String.valueOf(soundId));
+//        Log.e("In RPS", "woo!");
+//        Log.e("Ringtone extra: " , state);
+//        Log.e("SoundId: " , String.valueOf(soundId));
 
         //notification
         //set up the notification service
@@ -134,11 +134,11 @@ public class RingtonePlayingService extends Service
         {
             case "alerts on":
                 startId = 1;
-                Log.e("start ID is ", "" + startId);
+//                Log.e("start ID is ", "" + startId);
                 break;
             case "alerts off":
                 startId = 0;
-                Log.e("start ID is ","" + startId);
+//                Log.e("start ID is ","" + startId);
                 break;
             default:
                 startId = 0;
@@ -150,7 +150,7 @@ public class RingtonePlayingService extends Service
         //music should start playing
         if(!this.isRunning && startId == 1)
         {
-            Log.e("There is no music", "want on");
+//            Log.e("There is no music", "want on");
 
             switch (soundId)
             {
@@ -263,13 +263,13 @@ public class RingtonePlayingService extends Service
 
             //set up notification call command
             notificationManager.notify(0, notificationPopup);
-            Log.d("Notif", "notified");
+//            Log.d("Notif", "notified");
         }
         //if there is music playing and the user pressed "daijoubou off"
         //music should stop playing
         else if(this.isRunning && startId == 0)
         {
-            Log.e("There is music", "want end");
+//            Log.e("There is music", "want end");
             //stop ringtone
             mediaPlayer.stop();
             mediaPlayer.reset();
@@ -282,7 +282,7 @@ public class RingtonePlayingService extends Service
         //if there is no music playing and the user pressed "daijoubou off"
         else if(!this.isRunning && startId == 0)
         {
-            Log.e("There is no music", "want end");
+//            Log.e("There is no music", "want end");
 
             this.isRunning = false;
             this.startId = 0;
@@ -291,7 +291,7 @@ public class RingtonePlayingService extends Service
         //do nothing
         else if(this.isRunning && startId == 1)
         {
-            Log.e("There is music", "want on");
+//            Log.e("There is music", "want on");
 
             this.isRunning = true;
             this.startId = 0;
@@ -299,7 +299,7 @@ public class RingtonePlayingService extends Service
         //catch odd events
         else
         {
-            Log.e("else", "somehow got here");
+//            Log.e("else", "somehow got here");
         }
 
         if(mediaPlayer != null)
@@ -309,7 +309,7 @@ public class RingtonePlayingService extends Service
                 @Override
                 public void onCompletion(MediaPlayer mp)
                 {
-                    Log.e("Mediaplayer", "destroyed");
+//                    Log.e("Mediaplayer", "destroyed");
                     mp.stop();
                     mp.release();
                     mp = null;
@@ -324,7 +324,7 @@ public class RingtonePlayingService extends Service
     @Override
     public void onDestroy()
     {
-        Log.e("On destroy called", "ta da");
+//        Log.e("On destroy called", "ta da");
 
         super.onDestroy();
         this.isRunning = false;

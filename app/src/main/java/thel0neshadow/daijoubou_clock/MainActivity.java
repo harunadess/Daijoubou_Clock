@@ -69,9 +69,9 @@ public class MainActivity extends Activity
                 minuteString = timeString.substring(3, 5);
 
 
-                Log.d("Time ", timeString);
-                Log.d("Hour ", hourString);
-                Log.d("Minute ", minuteString);
+//                Log.d("Time ", timeString);
+//                Log.d("Hour ", hourString);
+//                Log.d("Minute ", minuteString);
 
                 if(hourString.contains(":"))
                 {
@@ -111,10 +111,10 @@ public class MainActivity extends Activity
 
                 //set the alarm manager
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                        1000 * 60 * 1, pendingIntent);
+                        AlarmManager.INTERVAL_HOUR, pendingIntent);
 //                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 //                        AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-                Log.d("Alarm", " set");
+//                Log.d("Alarm", " set");
                 alarmSet = true;
             }
         });
@@ -154,7 +154,7 @@ public class MainActivity extends Activity
                 //stop the ringtone
                 sendBroadcast(intent);
                 alarmSet = false;
-                Log.d("Alarm: ", "unset");
+//                Log.d("Alarm: ", "unset");
 
             }
         });
