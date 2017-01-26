@@ -112,9 +112,6 @@ public class MainActivity extends Activity
                 //set the alarm manager
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         AlarmManager.INTERVAL_HOUR, pendingIntent);
-//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                        AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-//                Log.d("Alarm", " set");
                 alarmSet = true;
             }
         });
@@ -133,11 +130,11 @@ public class MainActivity extends Activity
                 //cancel intent
                 if(alarmSet)
                 {
-//                    pendingIntent = PendingIntent.getBroadcast(MainActivity.this, intentId, intent,
-//                            PendingIntent.FLAG_CANCEL_CURRENT);
-//                    //set dummy alarm
-//                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                            AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+                    //due to some weird behaviour with destroying the app and reopening it
+                    //setting a dummy alarm and stopping it seems to fix it
+                    //set dummy alarm
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                            AlarmManager.INTERVAL_HOUR, pendingIntent);
                     //then cancel
                     alarmManager.cancel(pendingIntent);
                     pendingIntent.cancel();

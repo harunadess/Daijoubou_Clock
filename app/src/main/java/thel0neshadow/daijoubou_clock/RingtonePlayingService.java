@@ -120,8 +120,7 @@ public class RingtonePlayingService extends Service
                 .setContentText("It's " + hourString + "00 hours! <3")
                 .setContentIntent(pendingIntentMainActivity)
                 .setSmallIcon(R.drawable.ic_stat_name)
-                .setVibrate(new long[] {1000, 500, 1000, 500, 1000,
-                        500})
+                .setVibrate(new long[] {500, 250, 500, 250})
                 .setAutoCancel(false)
                 .build();
 
@@ -260,6 +259,7 @@ public class RingtonePlayingService extends Service
 
             this.isRunning = true;
             this.startId = 0;
+            soundId++; //increment to play correct sound next notification
 
             //set up notification call command
             notificationManager.notify(0, notificationPopup);
