@@ -131,10 +131,10 @@ public class MainActivity extends Activity
                 if(alarmSet)
                 {
                     //due to some weird behaviour with destroying the app and reopening it
-                    //setting a dummy alarm and stopping it seems to fix it
+                    //setting a dummy alarm with the same intent and stopping it seems to fix it
                     //set dummy alarm
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                            AlarmManager.INTERVAL_HOUR, pendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                            pendingIntent);
                     //then cancel
                     alarmManager.cancel(pendingIntent);
                     pendingIntent.cancel();

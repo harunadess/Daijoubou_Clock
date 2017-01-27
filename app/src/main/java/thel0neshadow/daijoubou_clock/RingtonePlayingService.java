@@ -110,7 +110,7 @@ public class RingtonePlayingService extends Service
                 .setContentText("It's " + hourString + "00 hours! <3")
                 .setContentIntent(pendingIntentMainActivity)
                 .setSmallIcon(R.drawable.ic_stat_name)
-                .setVibrate(new long[] {500, 250, 500, 250})
+                .setVibrate(new long[] {0, 100, 100, 100})  //{delay, vibrate, sleep, vibrate}
                 .setAutoCancel(false)
                 .build();
 
