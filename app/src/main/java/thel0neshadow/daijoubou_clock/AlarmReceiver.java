@@ -14,16 +14,12 @@ public class AlarmReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
-//        Log.e("In receiver.", "yay!");
-
         //fetch extra strings from the intent
         String getIntentExtra = intent.getExtras().getString("extra");
-//        Log.e("intent key: ", getIntentExtra);
 
         //fetch extra ids from the intent
         //tells the app what sound to play
-        int getSoundId = intent.getExtras().getInt("sound");
-//        Log.e("SoundId is", "" + String.valueOf(getSoundId));
+        int getIntentId = intent.getExtras().getInt("intent");
 
         //create an intent to the RingtonePlaying Service
         Intent serviceIntent = new Intent(context, RingtonePlayingService.class);
@@ -32,7 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver
         serviceIntent.putExtra("extra", getIntentExtra);
 
         //pass extra int from receiver to ringtone playing service
-        serviceIntent.putExtra("sound", getSoundId);
+        serviceIntent.putExtra("intent", getIntentId);
 
         //start the ringtone service
         context.startService(serviceIntent);

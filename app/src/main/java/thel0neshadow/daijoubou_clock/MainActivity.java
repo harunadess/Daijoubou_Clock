@@ -34,7 +34,7 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.context = this;    //????
+        this.context = this;    //this context is this one
 
         //initialise our alarmManager
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -68,11 +68,6 @@ public class MainActivity extends Activity
                 hourString = timeString.substring(0, 2);
                 minuteString = timeString.substring(3, 5);
 
-
-//                Log.d("Time ", timeString);
-//                Log.d("Hour ", hourString);
-//                Log.d("Minute ", minuteString);
-
                 if(hourString.contains(":"))
                 {
                     hourString = hourString.substring(0, 1);
@@ -100,14 +95,14 @@ public class MainActivity extends Activity
                 //tells the clock that you pressed the "daijoubou on" button
                 intent.putExtra("extra", "alerts on");
 
-                //tells clock what sound file to play - pass hour
-                intent.putExtra("sound", hour);
-
                 //create a pending intent that delays the intent
                 //until the specified calendar time
                 intentId++;
                 pendingIntent = PendingIntent.getBroadcast(MainActivity.this, intentId,
                       intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                //pass intentId
+                intent.putExtra("intent", intentId);
 
                 //set the alarm manager
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
@@ -146,12 +141,11 @@ public class MainActivity extends Activity
 //
 //                //also put int into daijoubou off section
 //                //to prevent crashing in a Null Pointer Exception
-                intent.putExtra("sound", hour);
+                intent.putExtra("intentId", intentId);
 
                 //stop the ringtone
                 sendBroadcast(intent);
                 alarmSet = false;
-//                Log.d("Alarm: ", "unset");
 
             }
         });

@@ -19,19 +19,18 @@ import java.util.Date;
 
 /*
     TODO: make it work, but better
+    might implement some form of changing wallpaper or something
     ********************************************
 */
 
 public class RingtonePlayingService extends Service
 {
 
-    MediaPlayer mediaPlayer;
-    int startId;
-    boolean isRunning;
-    int soundId;
-//    private Context context;
-//    private AssetManager assetManager;
-//    private String externalStoragePath;
+    private MediaPlayer mediaPlayer;
+    private int startId;
+    private boolean isRunning;
+    private int soundId;
+    private int intentId;
 
     @Override
     public IBinder onBind(Intent intent)
@@ -43,64 +42,41 @@ public class RingtonePlayingService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-//        Log.i("LocalService", "Received start id " + startId + ": " + intent);
-
         //fetch the extra string values
         String state = intent.getExtras().getString("extra");
 
         //fetch soundId value
-        soundId = intent.getExtras().getInt("sound");
-
-//        Log.e("In RPS", "woo!");
-//        Log.e("Ringtone extra: " , state);
-//        Log.e("SoundId: " , String.valueOf(soundId));
+        intentId = intent.getExtras().getInt("intent");
 
         //notification
         //set up the notification service
         NotificationManager notificationManager = (NotificationManager)
             getSystemService(NOTIFICATION_SERVICE);
+
         //set up an intent that goes to the main activity
         Intent intentMainActivity = new Intent(this.getApplicationContext(), MainActivity.class);
+
         //set up a pending intent
-        PendingIntent pendingIntentMainActivity = PendingIntent.getActivity(this, 0,
-                intentMainActivity, 0);
-
-
-//        //make bitmap here
-//        InputStream in = null;
-//        Bitmap notifBitmap = null;
-//        try
-//        {
-//            in = assetManager.open("drawable/ic_stat_name.png");
-//            notifBitmap = BitmapFactory.decodeStream(in);
-//            if(notifBitmap == null)
-//                throw new IOException("Couldn't load bitmap");
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        finally
-//        {
-//            if(in != null)
-//            {
-//                try
-//                {
-//                    in.close();
-//                } catch (IOException e)
-//                {
-//
-//                }
-//            }
-//        }
+        PendingIntent pendingIntentMainActivity = PendingIntent.getActivity(this, intentId,
+                intentMainActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+//        PendingIntent pendingIntentMainActivity = PendingIntent.getActivity(this, 0,
+//                intentMainActivity, 0);
 
         String timeString = DateFormat.getTimeInstance().format(new Date());
+
+        //Get hour from time string
         String hourString = timeString.substring(0, 2);
+
+        //Account for single digit times
         if(hourString.contains(":"))
             hourString = hourString.substring(0, 1);
 
+        //Account for 12 hour clocks
         if(timeString.contains("PM"))
             hourString = "1" + hourString;
+
+        //Make sure soundId that is to be played is the correct hour
+        soundId = Integer.parseInt(hourString);
 
         //put notification here
         //make the notification parameters
@@ -113,8 +89,6 @@ public class RingtonePlayingService extends Service
                 .setVibrate(new long[] {0, 100, 100, 100})  //{delay, vibrate, sleep, vibrate}
                 .setAutoCancel(false)
                 .build();
-
-//                .setLargeIcon(notifBitmap)
 
         //this converts the extra strings from the intent
         //to startId value 0 or 1
@@ -139,14 +113,11 @@ public class RingtonePlayingService extends Service
         //music should start playing
         if(!this.isRunning && startId == 1)
         {
-//            Log.e("There is no music", "want on");
-
             switch (soundId)
             {
             case 0:
                 //create instance of the media player + file
                 mediaPlayer = MediaPlayer.create(this, R.raw.haruna_00hrs);
-                //start playback
                 mediaPlayer.start();
                 break;
             case 1:
@@ -249,20 +220,18 @@ public class RingtonePlayingService extends Service
 
             this.isRunning = true;
             this.startId = 0;
-            soundId++; //increment to play correct sound next notification
+//            soundId++; //increment to play correct sound next notification
+                        //possibly fixed now using the time got in this class
 
             //set up notification call command
             notificationManager.notify(0, notificationPopup);
-//            Log.d("Notif", "notified");
         }
         //if there is music playing and the user pressed "daijoubou off"
         //music should stop playing
         else if(this.isRunning && startId == 0)
         {
-//            Log.e("There is music", "want end");
-            //stop ringtone
             mediaPlayer.stop();
-            mediaPlayer.reset();
+            mediaPlayer.reset();    //reset the mediaPlayer
 
             this.isRunning = false;
             this.startId = 0;
@@ -272,8 +241,6 @@ public class RingtonePlayingService extends Service
         //if there is no music playing and the user pressed "daijoubou off"
         else if(!this.isRunning && startId == 0)
         {
-//            Log.e("There is no music", "want end");
-
             this.isRunning = false;
             this.startId = 0;
         }
@@ -281,8 +248,6 @@ public class RingtonePlayingService extends Service
         //do nothing
         else if(this.isRunning && startId == 1)
         {
-//            Log.e("There is music", "want on");
-
             this.isRunning = true;
             this.startId = 0;
         }
@@ -299,7 +264,6 @@ public class RingtonePlayingService extends Service
                 @Override
                 public void onCompletion(MediaPlayer mp)
                 {
-//                    Log.e("Mediaplayer", "destroyed");
                     mp.stop();
                     mp.release();
                     mp = null;
@@ -314,8 +278,6 @@ public class RingtonePlayingService extends Service
     @Override
     public void onDestroy()
     {
-//        Log.e("On destroy called", "ta da");
-
         super.onDestroy();
         this.isRunning = false;
 
